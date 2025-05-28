@@ -1,0 +1,16 @@
+black
+isort
+ruff
+mypy
+django-stubs
+mypy-extensions
+djangorestframework-stubs
+
+
+
+
+django
+djangorestframework
+django_extensions
+Pillow
+psycopg2-binary
