@@ -70,12 +70,16 @@ class Order(models.Model):
 class OrderItem(models.Model):
     """Model representing an item in an order."""
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="items"
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
     @property
-    def total_price(self) -> Decimal:
+    def partial_total(self) -> Decimal:
         """Calculate the total price for this order item."""
         return self.quantity * self.product.price
 
