@@ -1,5 +1,7 @@
 """Serializer for all models in the shop_drf app."""
 
+from typing import Any
+
 from rest_framework import serializers
 
 from .models import Order, OrderItem, Product
@@ -75,7 +77,7 @@ class OrderSerializer(serializers.ModelSerializer[Order]):
         return float(sum(item.partial_total for item in obj.items.all()))
 
 
-class ProductInfoSerializer(serializers.Serializer[Product]):
+class ProductInfoSerializer(serializers.Serializer[Any]):
     """Serializer for Product model with additional info."""
     products = ProductSerializer(many=True)
     count = serializers.IntegerField()
