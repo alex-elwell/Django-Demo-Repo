@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from .models import Product, Order, OrderItem
-from .serializers import ProductSerializer, OrderSerializer, OrderItemSerializer
+from .models import Order, Product
+from .serializers import OrderSerializer, ProductSerializer
 
 
 @api_view(["GET"])
@@ -41,4 +41,15 @@ def order_list(_: Request) -> Response:
     """
     orders = Order.objects.all()
     serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def order_detail(_: Request, pk: str) -> Response:
+    """Retrieve a single order by its primary key (pk)
+    and return it as a JSON response.
+    """
+    order = get_object_or_404(Order, order_id=pk)
+
+    serializer = OrderSerializer(order)
     return Response(serializer.data)
