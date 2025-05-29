@@ -4,7 +4,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from .models import Order, Product
-from .serializers import OrderSerializer, ProductSerializer
+from .serializers import OrderSerializer, ProductSerializer, ProductInfoSerializer
+from django.db.models import Max
 
 
 @api_view(["GET"])
@@ -52,4 +53,17 @@ def order_detail(_: Request, pk: str) -> Response:
     order = get_object_or_404(Order, order_id=pk)
 
     serializer = OrderSerializer(order)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def product_info(_: Request):
+    '''Retrieve all products with additional info'''
+    products = Product.objects.all()
+    max_price_dict = products.aggregate(max_price=Max('price'))
+    serializer = ProductInfoSerializer({
+        'products': products,
+        'count': len(products),
+        'max_price': products.aggregate(max_price=Max('price'))['max_price'],
+    })
     return Response(serializer.data)

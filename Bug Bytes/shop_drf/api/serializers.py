@@ -73,3 +73,10 @@ class OrderSerializer(serializers.ModelSerializer[Order]):
     def get_total_price(self, obj: Order) -> float:
         """Calculate the total price of the order."""
         return float(sum(item.partial_total for item in obj.items.all()))
+
+
+class ProductInfoSerializer(serializers.Serializer[Product]):
+    """Serializer for Product model with additional info."""
+    products = ProductSerializer(many=True)
+    count = serializers.IntegerField()
+    max_price = serializers.FloatField()
