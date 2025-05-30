@@ -79,6 +79,7 @@ class OrderSerializer(serializers.ModelSerializer[Order]):
 
 class ProductInfoSerializer(serializers.Serializer[Any]):
     """Serializer for Product model with additional info."""
+
     products = ProductSerializer(many=True)
     count = serializers.IntegerField()
     max_price = serializers.FloatField()

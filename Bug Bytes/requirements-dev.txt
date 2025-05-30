@@ -5,7 +5,7 @@ mypy
 django-stubs
 mypy-extensions
 djangorestframework-stubs
-
+django-silk
 
 
 

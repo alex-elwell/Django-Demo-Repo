@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "api",
+    "silk",  # TODO - make this only work in debug mode
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "silk.middleware.SilkyMiddleware",  # TODO - make this only work in debug mode
 ]
 
 ROOT_URLCONF = "shop_drf.urls"

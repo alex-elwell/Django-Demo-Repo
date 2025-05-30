@@ -21,4 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
+    path(
+        "silk/", include("silk.urls", namespace="silk")
+    ),  # TODO - make this only work in debug mode
 ]
