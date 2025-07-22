@@ -1,0 +1,13 @@
+GET http://127.0.0.1:8000/api/products/
+
+###
+
+POST http://127.0.0.1:8000/api/products/create/
+Content-Type: application/json
+{
+    "name": "New Product",
+    "description": "This is a new product.",
+    "price": 19.99,
+    "stock": 100,
+    "category": "Electronics"
+}

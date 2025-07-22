@@ -5,9 +5,10 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 from .models import Order, Product
-from .serializers import OrderSerializer, ProductInfoSerializer, ProductSerializer
+from .serializers import OrderSerializer, Post_ProductSerializer, ProductInfoSerializer, ProductSerializer
 
 # Function-based views can be used to create a simple API
 # @api_view(["GET"])
@@ -34,6 +35,12 @@ class ProductListAPIView(generics.ListAPIView[Product]):
     serializer_class = ProductSerializer
     #
 
+# Class-based views can be used to create a more structured API
+class ProductCreateAPIView(generics.CreateAPIView[Product]):
+    """Create a Product and add to the database."""
+    model = Product
+    serializer_class = Post_ProductSerializer
+    
 
 # Function-based views can be used to retrieve a single product
 # @api_view(["GET"])
@@ -92,15 +99,23 @@ def order_detail(_: Request, pk: str) -> Response:
     return Response(serializer.data)
 
 
-@api_view(["GET"])
-def product_info(_: Request) -> Response:
+class ProductInfoAPIView(APIView):
     """Retrieve all products with additional info"""
-    products = Product.objects.all()
-    serializer = ProductInfoSerializer(
-        {
-            "products": products,
-            "count": len(products),
-            "max_price": products.aggregate(max_price=Max("price"))["max_price"],
-        }
-    )
-    return Response(serializer.data)
+    def get(self, request: Request) :
+        products = Product.objects.all()
+        serializer = ProductInfoSerializer(
+            {
+                "products": products,
+                "count": len(products),
+                "max_price": products.aggregate(max_price=Max("price"))["max_price"],
+            }
+        )
+        return Response(serializer.data)
+
+
+
+
+#Create and List a Product - restricted to admin or staff users
+class ProductListCreateAPIView(generics.ListCreateAPIView[Product]):
+    queryset = Product.objects.all()
+    serializer_class = Post_ProductSerializer

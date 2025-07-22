@@ -6,6 +6,22 @@ from rest_framework import serializers
 
 from .models import Order, OrderItem, Product
 
+class Post_ProductSerializer(serializers.ModelSerializer[Product]):
+    """Serializer for Product model. - accepting post requests"""
+    class Meta:
+        model = Product
+        fields = (
+            "name",
+            "description",
+            "price",
+            "stock",
+            "image",
+        )
+    def validate_price(self, value: float) -> float:
+        """Ensure the price is a positive number."""
+        if value <= 0:
+            raise serializers.ValidationError("Price must be a positive number.")
+        return value
 
 class ProductSerializer(serializers.ModelSerializer[Product]):
     """Serializer for Product model."""
