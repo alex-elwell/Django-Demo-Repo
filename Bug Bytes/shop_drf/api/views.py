@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Order, Product
 from .serializers import OrderSerializer, ProductInfoSerializer, ProductSerializer
@@ -61,7 +62,21 @@ class ProductDetailAPIView(generics.RetrieveAPIView[Product]):
 #     return Response(serializer.data)
 
 
+class UserOrderListAPIView(generics.ListAPIView[Order]):
+    """ Order List API View - to return only user orders"""
+    queryset = Order.objects.prefetch_related("items__product")
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = super().get_queryset()
+        return qs.filter(user=user)  # Filter orders by the logged-in user
+
+
+
 class OrderListAPIView(generics.ListAPIView[Order]):
+    """ Order List API View - to return only user orders"""
     queryset = Order.objects.prefetch_related("items__product")
     serializer_class = OrderSerializer
 
